@@ -35,7 +35,8 @@ public class ManagerService {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
-        if (!ObjectUtils.nullSafeEquals(user.getId(), todo.getUser().getId())) {
+        // 일정이 같은지 동등성 비교 !
+        if (!ObjectUtils.nullSafeEquals(todo.getId(), todo)) {
             throw new InvalidRequestException("일정을 생성한 유저만 담당자를 지정할 수 있습니다.");
         }
 
