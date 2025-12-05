@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.expert.domain.user.enums.UserRole;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -67,7 +68,10 @@ public class JwtFilter implements Filter {
                 return;
             }
 
-            chain.doFilter(request, response);
+            ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(httpRequest);
+
+
+            chain.doFilter(requestWrapper, response);
         } catch (ExpiredJwtException e) {
             log.info("JWT 만료: userId={}, URI={}", e.getClaims().getSubject(), url);
             sendErrorResponse(httpResponse, HttpStatus.UNAUTHORIZED, "인증이 필요합니다.");
